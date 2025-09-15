@@ -1,0 +1,4 @@
+domain_path: /home/min/fpga/soc/platform_stop_watch_intr/export/platform_stop_watch_intr/sw/standalone_microblaze_riscv_0
+app_src_dir: /tools/Xilinx/Vitis/2024.2/data/embeddedsw/lib/sw_apps/hello_world
+template: hello_world
+lang: c

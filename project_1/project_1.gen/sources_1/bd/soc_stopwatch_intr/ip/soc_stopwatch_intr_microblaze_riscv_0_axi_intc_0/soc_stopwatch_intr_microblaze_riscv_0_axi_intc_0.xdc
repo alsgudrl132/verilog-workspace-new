@@ -1,0 +1,1 @@
+# file: soc_stopwatch_intr_microblaze_riscv_0_axi_intc_0.xdc
