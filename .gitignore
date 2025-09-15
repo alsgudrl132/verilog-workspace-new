@@ -1,0 +1,32 @@
+# Vivado 프로젝트 파일들
+*.cache/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+*.srcs/sources_1/bd/*/hdl/
+*.xpr.backup.*
+
+# 로그 및 저널 파일
+*.jou
+*.log
+vivado*.backup.*
+.Xil/
+
+# 시뮬레이션 파일
+xsim.dir/
+*.wdb
+
+# 구현 결과물
+*.bit
+*.ltx
+*.rpt
+*.dcp
+
+# OS 관련
+.DS_Store
+Thumbs.db
+
+# 임시 파일
+*~
+*.tmp
