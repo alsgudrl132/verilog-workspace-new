@@ -129,7 +129,7 @@ int main()
                                  (Xil_ExceptionHandler)XIntc_InterruptHandler,
                                  &intc_instance);
     Xil_ExceptionEnable();
-
+    print("hello");
     lcdInit();
     lcdString("00:00");
 

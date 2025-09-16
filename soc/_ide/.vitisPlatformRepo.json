@@ -1,3 +1,7 @@
 [
-  "/home/min/fpga/soc/platform_stop_watch_intr/export/platform_stop_watch_intr"
+  "/home/min/fpga/soc/platform_stop_watch_intr/export/platform_stop_watch_intr",
+  "/home/min/fpga/soc/platform_iic_txtlcd/export/platform_iic_txtlcd",
+  "/home/min/fpga/soc/platform_hc05_test/export/platform_hc05_test",
+  "/home/min/fpga/soc/platform_hc05_test_pullup/export/platform_hc05_test_pullup",
+  "/home/min/fpga/soc/platform_pwm/export/platform_pwm"
 ]
