@@ -45,6 +45,13 @@ module ImmGen(
 
     // U-type: 상위 20비트를 그대로 사용하고, 하위 12비트는 0으로 채움
     assign U = {inst_Imm[24 -: 20], 12'b0};
-
-    // (J, S 타입은 생략된 상태 — 이후 확장 가능)
+    
+    assign J = {{11{inst_Imm[24]}}, inst_Imm[24], inst_Imm[12:5], inst_Imm[13], inst_Imm[23-:10], 1'b0};
+    assign S = {{20{inst_Imm[24]}}, inst_Imm[24:7], inst_Imm[4:0]};
+    
+    assign Imm = (ImmSel == 0) ? I :
+                 (ImmSel == 1) ? B :
+                 (ImmSel == 2) ? U :
+                 (ImmSel == 3) ? J :
+                 (ImmSel == 4) ? S : 0;
 endmodule
