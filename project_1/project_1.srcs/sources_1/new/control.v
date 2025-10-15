@@ -29,11 +29,12 @@
 module control(
     input [31:0] instruction,  // 전체 명령어 입력
     output [3:0] ALUSel,       // ALU 연산 선택 신호
-    output [2:0] ImmSel        // 즉시값 선택 신호 (I=0, B=1, U=2, J=3, S=4)
+    output [2:0] ImmSel,        // 즉시값 선택 신호 (I=0, B=1, U=2, J=3, S=4)
+    output BSel, MemRW, WBSel 
 );
 
     // 명령어 종류 판별용 조건 플래그
-    wire I_cond, B_cond, U_cond, J_cond, S_cond;
+    wire I_cond, B_cond, U_cond, J_cond, S_cond, R_cond;
     
     // instruction[6:2] : opcode 일부
     // instruction[14:12] : funct3
@@ -47,6 +48,10 @@ module control(
     assign U_cond = {inst_opcode[4], inst_opcode[2:0]} == 4'b0101;   // U-type
     assign J_cond = inst_opcode[4:0] == 5'b11011;                    // J-type
     assign S_cond = inst_opcode[4:0] == 5'b01000;                    // S-type
+    assign R_cond = inst_opcode[4:0] == 5'b01100;                    // R-type
+
+    assign BSel = R_cond;
+    assign MemRW = S_cond;
     
     // ALU 제어 신호는 funct7[5:0] 기반 (상위 4비트만 추출)
     assign ALUSel = inst_opcode[8:5];
@@ -57,4 +62,6 @@ module control(
                     (U_cond == 1) ? 2 :
                     (J_cond == 1) ? 3 :
                     (S_cond == 1) ? 4 : 5; // 기본값 5 (잘못된 타입)
+                    
+    assign WBSel = (inst_opcode[4:0] == 5'b00000) ? 0 : 1;             
 endmodule
