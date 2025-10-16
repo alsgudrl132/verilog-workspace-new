@@ -41,11 +41,11 @@ module riscV32I(
     instr_mem IMEM(.instruction(instruction), .PC(PC));
     
     wire [31:0] DataA, DataB;
-    wire [31:0] WB; // Write Back
+    wire [31:0] WB, WB_Byte, WB_Half, WB_Cut; // Write Back
     
     wire RegEn;
     
-    registerFile REGFILE(.RD1(DataA), .RD2(DataB), .WD(WB), .RR1(instruction[19:15]), .RR2(instruction[24:20]), .WR(instruction[11:7]),
+    registerFile REGFILE(.RD1(DataA), .RD2(DataB), .WD(WB_Cut), .RR1(instruction[19:15]), .RR2(instruction[24:20]), .WR(instruction[11:7]),
                          .RegWrite(RegEn), .clk(clk), .reset_p(reset_p));
                   
     wire [31:0] A, B, ALU_o;           
@@ -54,17 +54,21 @@ module riscV32I(
     wire [3:0] ALUSel;
     ALU_2 ALU(.A(A), .B(ALU_B), .ALU_o(ALU_o), .ALUSel(ALUSel));   
     
-    wire [2:0] ImmSel;
-    wire BSel, WBSel;
-    control CNTR(.instruction(instruction), .ALUSel(ALUSel), .ImmSel(ImmSel), .MemRW(MemRW), .WBSel(WBSel));  
+    wire [2:0] ImmSel, WordSizeSel;
+    wire BSel, WBSel, MemRW;
+    control CNTR(.instruction(instruction), .ALUSel(ALUSel), .ImmSel(ImmSel), .MemRW(MemRW), .WBSel(WBSel), .WordSizeSel(WordSizeSel));  
     
     wire [31:0] Imm;
     wire BSel;
     ImmGen(.ImmSel(ImmSel), .inst_Imm(instruction[31:7]), .Imm(Imm), .BSel(BSel));             
     
     wire [31:0] DMEM;
-    wire MemRW;
     data_mem DATAMEM(.ReadData(DMEM), .ADDR(ALU_o), .WriteData(DataB), .clk(clk), .MemWrite(MemRW));
     
     assign WB = (WBSel == 1) ? ALU_o : DMEM;
+    assign WB_Byte = WordSizeSel[2] ? {24'b0, WB[7:0]} : {{24{WB[7]}}, WB[7:0]};
+    assign WB_Half = WordSizeSel[2] ? {16'b0, WB[15:0]} : {{16{WB[15]}}, WB[15:0]};
+    assign WB_Cut = (WordSizeSel[1:0] == 0) ? WB_Byte :
+                    (WordSizeSel[1:0] == 1) ? WB_Half : WB;
+
 endmodule

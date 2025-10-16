@@ -30,6 +30,7 @@ module control(
     input [31:0] instruction,  // 전체 명령어 입력
     output [3:0] ALUSel,       // ALU 연산 선택 신호
     output [2:0] ImmSel,        // 즉시값 선택 신호 (I=0, B=1, U=2, J=3, S=4)
+    output [2:0] WordSizeSel,   // Byte : 0, Half Word : 1, Word : 2,
     output BSel, MemRW, WBSel 
 );
 
@@ -63,5 +64,8 @@ module control(
                     (J_cond == 1) ? 3 :
                     (S_cond == 1) ? 4 : 5; // 기본값 5 (잘못된 타입)
                     
-    assign WBSel = (inst_opcode[4:0] == 5'b00000) ? 0 : 1;             
+    assign WBSel = (inst_opcode[4:0] == 5'b00000) ? 0 : 1;        
+    
+    assign WordSizeSel = inst_opcode[7:5];
+         
 endmodule
